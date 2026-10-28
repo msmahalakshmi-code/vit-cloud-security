@@ -61,7 +61,7 @@ class Engine:
 
     # ------------------------------------------------------------------
     def process_event(self, user_id: str, event_type: str, detail: dict, timestamp: str = None):
-        ts = timestamp or (datetime.now(timezone.utc).isoformat() + "Z")
+        ts = timestamp or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         now_epoch = time.time()
 
         db.insert_event(ts, user_id, event_type, detail)
