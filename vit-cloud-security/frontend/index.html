@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIT Cloud Security Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">VCS</div>
+      <div class="brand-text">
+        <div class="brand-title">VIT CLOUD SECURITY CENTER</div>
+        <div class="brand-sub">Multi-Agent Threat Monitoring &middot; Simulated Environment</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="live-dot"><span class="dot"></span> LIVE</div>
+      <div id="clock" class="clock">--:--:--</div>
+    </div>
+  </header>
+
+  <div class="body">
+    <nav class="sidenav">
+      <button class="nav-item active" data-tab="dashboard">Overview</button>
+      <button class="nav-item" data-tab="incidents">Incidents</button>
+      <button class="nav-item" data-tab="users">Users</button>
+      <button class="nav-item" data-tab="agents">Agent Monitoring</button>
+      <button class="nav-item" data-tab="audit">Audit Log</button>
+      <button class="nav-item" data-tab="simulate">Simulate Attack</button>
+      <button class="nav-item" data-tab="intelligence">Security Intelligence</button>
+    </nav>
+
+    <main class="content">
+
+      <!-- OVERVIEW -->
+      <section id="tab-dashboard" class="tab active">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-label">Active Users</div><div class="stat-value" id="s-active">0</div></div>
+          <div class="stat-card"><div class="stat-label">Files Monitored</div><div class="stat-value" id="s-files">0</div></div>
+          <div class="stat-card"><div class="stat-label">Security Events</div><div class="stat-value" id="s-events">0</div></div>
+          <div class="stat-card alert"><div class="stat-label">Critical Threats</div><div class="stat-value" id="s-critical">0</div></div>
+          <div class="stat-card warn"><div class="stat-label">Blocked / Flagged</div><div class="stat-value" id="s-blocked">0</div></div>
+          <div class="stat-card"><div class="stat-label">Total Incidents</div><div class="stat-value" id="s-incidents">0</div></div>
+        </div>
+
+        <div class="panel-row">
+          <div class="panel dist-panel">
+            <div class="panel-title">Threat Distribution</div>
+            <div id="dist-bars" class="dist-bars"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Recent Incidents</div>
+            <div id="recent-incidents" class="incident-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INCIDENTS -->
+      <section id="tab-incidents" class="tab">
+        <div class="panel-title-row">
+          <div class="panel-title">All Incidents</div>
+          <button class="btn ghost" id="refresh-incidents">Refresh</button>
+        </div>
+        <div id="incident-table" class="table"></div>
+      </section>
+
+      <!-- USERS -->
+      <section id="tab-users" class="tab">
+        <div class="panel-title-row">
+          <div class="panel-title">Simulated VIT Users</div>
+          <button class="btn ghost" id="refresh-users">Refresh</button>
+        </div>
+        <div id="user-table" class="table"></div>
+      </section>
+
+      <!-- AGENTS -->
+      <section id="tab-agents" class="tab">
+        <div class="panel-title">Agent Monitoring</div>
+        <div id="agent-grid" class="agent-grid"></div>
+        <div class="panel" style="margin-top:20px;">
+          <div class="panel-title">Architecture</div>
+          <pre class="arch-diagram">VIT CLOUD SIMULATOR
+        |
+Login Events / File Events / Network Events
+        |
+Authentication Agent   Data Access Agent   Network Agent
+        \\              |               /
+                 Threat Analysis Agent
+                        |
+                  Threat Score (0-100)
+                        |
+                  Response Agent
+                        |
+        Actions + Incident Record + Audit Log
+                        |
+                 This Dashboard</pre>
+        </div>
+      </section>
+
+      <!-- AUDIT LOG -->
+      <section id="tab-audit" class="tab">
+        <div class="panel-title-row">
+          <div class="panel-title">Audit Log</div>
+          <button class="btn ghost" id="refresh-audit">Refresh</button>
+        </div>
+        <div id="audit-table" class="table mono"></div>
+      </section>
+
+      <!-- SIMULATE -->
+      <section id="tab-simulate" class="tab">
+        <div class="panel-title">Trigger a Simulated Attack Scenario</div>
+        <p class="hint">This plays a scripted sequence of events through the real agents, exactly like the
+          project spec's Section 4 scenarios. Everything stays inside the simulated environment — nothing
+          leaves this app. Watch the Overview and Incidents tabs update live.</p>
+        <div id="scenario-grid" class="scenario-grid"></div>
+        <div id="sim-status" class="sim-status"></div>
+      </section>
+
+
+      <!-- SECURITY INTELLIGENCE: all six advanced capabilities on one page -->
+      <section id="tab-intelligence" class="tab">
+        <div class="intel-hero">
+          <div>
+            <div class="eyebrow">VIT CLOUD SECURITY CENTER / ADVANCED CONTROLS</div>
+            <h1>Security Intelligence</h1>
+            <p class="hint">Risk-aware access, correlated investigation, decoy-resource detection, attack-path exposure, role-aware baselines and confidence-aware agent decisions. All activity is simulated locally.</p>
+          </div>
+          <div class="intel-hero-mark">VCS<span> / DEFEND</span></div>
+        </div>
+
+        <div class="intel-stat-grid">
+          <div class="intel-stat"><span>Recent evidence events</span><strong id="intel-events">—</strong></div>
+          <div class="intel-stat"><span>Decoy interactions</span><strong id="intel-decoys">—</strong></div>
+          <div class="intel-stat"><span>Reviewed feedback</span><strong id="intel-feedback">—</strong></div>
+          <div class="intel-stat"><span>Decision mode</span><strong class="accent-text">Explainable</strong></div>
+        </div>
+
+        <div class="intel-grid">
+          <section class="intel-panel span-2">
+            <div class="intel-section-head"><div><span class="section-index">01</span><h2>Adaptive risk-based access</h2></div><span class="mini-tag">POLICY SIMULATION</span></div>
+            <p class="intel-copy">Evaluate an operation using the user's current account state, role permissions, recent activity and requested resource sensitivity.</p>
+            <div class="intel-form-grid">
+              <label>Simulated user<select id="access-user"></select></label>
+              <label>Requested operation<select id="access-operation"><option value="VIEW">View resource</option><option value="DOWNLOAD">Download file</option><option value="BULK_DOWNLOAD">Bulk download</option><option value="EXAM_ACCESS">Access exam paper</option><option value="MANAGE_USERS">Manage users</option></select></label>
+              <label>Resource sensitivity<select id="access-sensitivity"><option value="LOW">Low</option><option value="MEDIUM">Medium</option><option value="HIGH" selected>High</option><option value="CRITICAL">Critical</option></select></label>
+            </div>
+            <button class="btn primary" id="evaluate-access">Evaluate access policy</button>
+            <div id="access-result" class="result-box empty-result">Choose a user and evaluate a simulated access request.</div>
+          </section>
+
+          <section class="intel-panel">
+            <div class="intel-section-head"><div><span class="section-index">02</span><h2>Threat investigation timeline</h2></div></div>
+            <p class="intel-copy">Correlate login, file, network, decoy and incident evidence in chronological order.</p>
+            <label>User filter<select id="timeline-user"><option value="">All users</option></select></label>
+            <button class="btn ghost" id="refresh-timeline">Refresh timeline</button>
+            <div id="timeline-list" class="timeline-list"><div class="empty">Loading timeline…</div></div>
+          </section>
+
+          <section class="intel-panel">
+            <div class="intel-section-head"><div><span class="section-index">03</span><h2>Academic cloud honeypot</h2></div><span class="mini-tag warning-tag">DECOY RESOURCE</span></div>
+            <p class="intel-copy">Record a controlled interaction with a synthetic decoy. A hit is an investigation signal, not proof of compromise.</p>
+            <label>Simulated user<select id="decoy-user"></select></label>
+            <label>Decoy resource<select id="decoy-resource"><option value="EXAM_ARCHIVE_DECOY">Decoy examination archive</option><option value="STUDENT_RECORD_DECOY">Decoy student record</option><option value="FACULTY_RESEARCH_DECOY">Decoy faculty research folder</option></select></label>
+            <button class="btn primary" id="trigger-decoy">Simulate decoy access</button>
+            <div id="decoy-result" class="result-box empty-result">No decoy interaction recorded in this session.</div>
+          </section>
+
+          <section class="intel-panel">
+            <div class="intel-section-head"><div><span class="section-index">04</span><h2>Attack path &amp; blast radius</h2></div></div>
+            <p class="intel-copy">Estimate which academic resource classes are reachable by a user's role and prioritize exposure review.</p>
+            <label>Account to inspect<select id="path-user"></select></label>
+            <button class="btn ghost" id="inspect-path">Analyze reachable resources</button>
+            <div id="path-result" class="path-result"><div class="empty">Select a user to view simulated access paths.</div></div>
+          </section>
+
+          <section class="intel-panel">
+            <div class="intel-section-head"><div><span class="section-index">05</span><h2>Behaviour baseline &amp; feedback</h2></div></div>
+            <p class="intel-copy">Use role-aware reference thresholds and administrator review labels to help tune future detection. Feedback is saved locally.</p>
+            <div class="intel-form-grid">
+              <label>Incident ID<input id="feedback-incident" placeholder="Optional, e.g. VIT-ABC123"></label>
+              <label>Review outcome<select id="feedback-label"><option value="LEGITIMATE">Legitimate activity</option><option value="SUSPICIOUS">Suspicious activity</option></select></label>
+            </div>
+            <label>Reviewer note<input id="feedback-note" placeholder="Why was this alert reviewed?"></label>
+            <button class="btn primary" id="submit-feedback">Save review feedback</button>
+            <div id="baseline-result" class="baseline-result"></div>
+            <div id="feedback-result" class="result-box empty-result">No feedback submitted yet.</div>
+          </section>
+
+          <section class="intel-panel">
+            <div class="intel-section-head"><div><span class="section-index">06</span><h2>Confidence-aware agent decisions</h2></div></div>
+            <p class="intel-copy">Compare agent risk and evidence completeness. Conflicting or sparse signals should prompt review rather than imply certainty.</p>
+            <label>User to assess<select id="confidence-user"></select></label>
+            <button class="btn ghost" id="assess-confidence">Assess agent confidence</button>
+            <div id="confidence-result" class="confidence-result"><div class="empty">Select a user to assess available evidence.</div></div>
+          </section>
+        </div>
+        <div class="intel-footnote">Prototype note: all access decisions, decoy resources and response recommendations are simulated. This page does not enforce permissions on a real cloud service.</div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="modal-backdrop" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
