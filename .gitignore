@@ -1,5 +1,6 @@
 __pycache__/
 *.py[cod]
 venv/
+.env
 vit-cloud-security/dataset/*.db
 vit-cloud-security/dataset/security_intelligence_state.json
